@@ -1,14 +1,10 @@
-import { TableMatcher } from "@/app/lib/utils";
 import { cookies } from "next/headers";
 
 export async function POST(request) {
   const cookie = cookies();
   const accessToken = (await cookie).get("access_token")?.value;
-  const provider = (await cookie).get("provider")?.value;
-  let metadata = (await cookie).get("metadata")?.value;
   let formData = await request.json();
-  metadata = TableMatcher(metadata);
-  formData = { metadata: metadata, provider: provider, ...formData };
+  formData = { ...formData };
 
   try {
     const response = await fetch(`${process.env.SERVER_ADDRESS}/query_ai`, {

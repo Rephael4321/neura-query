@@ -55,22 +55,10 @@ export async function GetAccessToken(endpoint, request) {
   }
 }
 
-export function TableMatcher(str) {
-  const tables = [];
-
-  const tablePattern = /Table\(([^()]*|\((?:[^()]*|\([^()]*\))*\))*\)/g;
-
-  const matches = str.match(tablePattern);
-
-  if (matches) {
-    matches.forEach((match) => {
-      tables.push(match);
-    });
-  }
-
-  return tables;
-}
-
 export function URIComposer(data) {
-  return `postgresql+asyncpg://${data.username}:${data.password}@${data.host}/${data.DBName}`;
+  if (data.provider.toUpperCase() === "NEON") {
+    return `postgresql+asyncpg://${data.username}:${data.password}@${data.host}/${data.DBName}`;
+  } else if (data.provider.toUpperCase() === "SUPABASE") {
+    return `postgresql+asyncpg://${data.username}:${data.password}@${data.host}:${data.port}/${data.DBName}`;
+  }
 }

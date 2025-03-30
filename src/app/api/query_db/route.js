@@ -5,8 +5,7 @@ export async function POST(request) {
   const cookie = cookies();
   const accessToken = (await cookie).get("access_token")?.value;
   const uri = (await cookie).get("uri")?.value;
-  const provider = (await cookie).get("provider")?.value;
-  formData = { uri: uri, provider: provider, ...formData };
+  formData = { uri: uri, ...formData };
 
   try {
     const response = await fetch(`${process.env.SERVER_ADDRESS}/query_db`, {
