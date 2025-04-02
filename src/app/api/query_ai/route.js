@@ -19,15 +19,12 @@ export async function POST(request) {
 
     if (response.ok) {
       const data = await response.json();
-
       return new Response(JSON.stringify(data), { status: 200 });
     } else if (response.status === 401) {
       const data = await response.json();
-
       return new Response(JSON.stringify(data), { status: 401 });
     } else if (response.status === 422) {
       const data = await response.json();
-
       return new Response(JSON.stringify(data), { status: 422 });
     }
   } catch (error) {

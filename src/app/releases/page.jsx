@@ -5,7 +5,11 @@ export default function Releases() {
     <div className="mx-[20%]">
       <h1 className="text-[2rem] my-[24px]">Releases</h1>
       <Release
-        title="1.0.3 - 30/03/2025"
+        title="1.1.0 - 02/04/2025"
+        description="Enhanced AI prompts are on the go. Now Neura Query can support a wide variety of human queries. It can actually support general questions about your DB and response in much more elaborate manner."
+      ></Release>
+      <Release
+        title="1.0.3 - 31/03/2025"
         description="New update! Now Neura Query will refresh its metadata cache whenever it is changed."
       ></Release>
       <Release

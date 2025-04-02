@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Button from "@/ui/button";
+import { Version } from "@/app/lib/client_utils";
 
 export default function SignedOut() {
   return (
@@ -11,7 +12,7 @@ export default function SignedOut() {
           </Link>
           &nbsp;&nbsp;
           <Link href="/releases" className="text-[white] text-[0.9rem]">
-            1.0.3
+            {Version()}
           </Link>
         </div>
         <div className="flex gap-[10px]">

@@ -71,7 +71,7 @@ export default function Querier() {
 
       if (response.ok) {
         const data = await response.json();
-        const aiResponse = data.ai_response;
+        const command = data.command;
         let result;
         if (data.result.type === "str") {
           result = data.result.message;
@@ -85,7 +85,7 @@ export default function Querier() {
             .join(" | ");
         }
         setQueryResult({ result: result });
-        setQueryFormData({ query: aiResponse });
+        setQueryFormData({ query: command });
       } else {
         const errorData = await response.json();
         setTextMessage(errorData.message || "Error submitting form.");
