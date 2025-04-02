@@ -11,7 +11,7 @@ export default function SignedOut() {
           </Link>
           &nbsp;&nbsp;
           <Link href="/releases" className="text-[white] text-[0.9rem]">
-            1.0.1
+            1.0.3
           </Link>
         </div>
         <div className="flex gap-[10px]">

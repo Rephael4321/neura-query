@@ -5,7 +5,7 @@ export default function Releases() {
     <div className="mx-[20%]">
       <h1 className="text-[2rem] my-[24px]">Releases</h1>
       <Release
-        title="1.0.2 - 30/03/2025"
+        title="1.0.3 - 30/03/2025"
         description="New update! Now Neura Query will refresh its metadata cache whenever it is changed."
       ></Release>
       <Release
