@@ -20,14 +20,9 @@ export async function POST(request) {
     if (response.ok) {
       const data = await response.json();
 
-      return new Response(
-        JSON.stringify({
-          message: data.message,
-        }),
-        {
-          status: 200,
-        }
-      );
+      return new Response(JSON.stringify(data), {
+        status: 200,
+      });
     } else if (response.status === 400) {
       const data = await response.json();
 

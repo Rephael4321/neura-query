@@ -4,7 +4,8 @@ export async function POST(request) {
   const cookie = cookies();
   const accessToken = (await cookie).get("access_token")?.value;
   let formData = await request.json();
-  formData = { ...formData };
+  const uri = (await cookie).get("uri")?.value;
+  formData = { uri: uri, ...formData };
 
   try {
     const response = await fetch(`${process.env.SERVER_ADDRESS}/query_ai`, {
@@ -19,14 +20,7 @@ export async function POST(request) {
     if (response.ok) {
       const data = await response.json();
 
-      return new Response(
-        JSON.stringify({
-          message: data.message,
-        }),
-        {
-          status: 200,
-        }
-      );
+      return new Response(JSON.stringify(data), { status: 200 });
     } else if (response.status === 401) {
       const data = await response.json();
 

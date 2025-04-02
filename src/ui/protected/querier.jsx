@@ -35,13 +35,18 @@ export default function Querier() {
 
       if (response.ok) {
         const data = await response.json();
-        const result = data.message
-          .map((item) =>
-            Object.entries(item)
-              .map(([key, value]) => `${key}: ${value}`)
-              .join(", ")
-          )
-          .join(" | ");
+        let result;
+        if (data.message.type === "str") {
+          result = data.message.message;
+        } else if (data.message.type === "list") {
+          result = data.message.message
+            .map((item) =>
+              Object.entries(item)
+                .map(([key, value]) => `${key}: ${value}`)
+                .join(", ")
+            )
+            .join(" | ");
+        }
         setQueryResult({ result: result });
       } else {
         const errorData = await response.json();
@@ -66,7 +71,21 @@ export default function Querier() {
 
       if (response.ok) {
         const data = await response.json();
-        setQueryFormData({ query: data.message });
+        const aiResponse = data.ai_response;
+        let result;
+        if (data.result.type === "str") {
+          result = data.result.message;
+        } else if (data.result.type === "list") {
+          result = data.result.message
+            .map((item) =>
+              Object.entries(item)
+                .map(([key, value]) => `${key}: ${value}`)
+                .join(", ")
+            )
+            .join(" | ");
+        }
+        setQueryResult({ result: result });
+        setQueryFormData({ query: aiResponse });
       } else {
         const errorData = await response.json();
         setTextMessage(errorData.message || "Error submitting form.");
