@@ -5,6 +5,10 @@ export default function Releases() {
     <div className="mx-[20%]">
       <h1 className="text-[2rem] my-[24px]">Releases</h1>
       <Release
+        title="1.1.2 - 04/04/2025"
+        description="New design for connection page. Now you can use a demo DB to work with the AI."
+      ></Release>
+      <Release
         title="1.1.1 - 04/04/2025"
         description="New design for query window. With a new looking design, now it is much more convenient to query the AI and read the results."
       ></Release>

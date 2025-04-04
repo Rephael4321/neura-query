@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/ui/button";
+import { connection } from "next/server";
 
 export default function ConnectDB() {
   const [formData, setFormData] = useState({
@@ -22,15 +23,12 @@ export default function ConnectDB() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setMessage("");
-
+  const handleSubmit = async (e, connectionDetails) => {
     try {
       const response = await fetch("/api/connect_db", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(connectionDetails),
       });
 
       if (response.ok) {
@@ -44,83 +42,121 @@ export default function ConnectDB() {
     }
   };
 
+  const handleDBConnectionRequest = async (e) => {
+    e.preventDefault();
+    setMessage("");
+    handleSubmit(e, formData);
+  };
+
+  const handleDemoConnectionRequest = async (e) => {
+    e.preventDefault();
+    setMessage("");
+    const response = await fetch("/api/get_demo_connection_details");
+    const demoConnectionDetails = await response.json();
+    handleSubmit(e, demoConnectionDetails);
+  };
+
   return (
-    <>
-      <h1 className="text-center text-[32px]">Connect your DB</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="flex flex-column justify-center">
-          <div className="grid grid-cols-[max-content_250px] gap-4 p-4 m-auto">
-            <label htmlFor="provider">Provider</label>
-            <select
-              id="provider"
-              name="provider"
-              className={inputClass}
-              value={formData.provider}
-              onChange={handleChange}
-            >
-              <option value="neon">Neon</option>
-              <option value="supabase">Supabase</option>
-            </select>
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              className={inputClass}
-              autoComplete="true"
-              required
-            />
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className={inputClass}
-              required
-            />
-            <label htmlFor="host">Host</label>
-            <input
-              type="text"
-              id="host"
-              name="host"
-              value={formData.host}
-              onChange={handleChange}
-              className={inputClass}
-              autoComplete="true"
-              required
-            />
-            <label htmlFor="port">Port</label>
-            <input
-              type="number"
-              id="port"
-              name="port"
-              value={formData.port}
-              onChange={handleChange}
-              className={inputClass}
-              autoComplete="true"
-            />
-            <label htmlFor="DBName">DB name</label>
-            <input
-              type="text"
-              id="DBName"
-              name="DBName"
-              value={formData.DBName}
-              onChange={handleChange}
-              className={inputClass}
-              autoComplete="true"
-              required
-            />
+    <div className="flex justify-around mx-[15%]">
+      <div className="flex flex-col">
+        <h2 className="text-center text-[32px] py-[2rem]">
+          Connect your own DB
+        </h2>
+        <form
+          onSubmit={handleDBConnectionRequest}
+          className="flex flex-col flex-1 items-center"
+        >
+          <div className="flex flex-column justify-center">
+            <div className="grid grid-cols-[max-content_250px] gap-4 p-4 m-auto">
+              <label htmlFor="provider">Provider</label>
+              <select
+                id="provider"
+                name="provider"
+                className={inputClass}
+                value={formData.provider}
+                onChange={handleChange}
+              >
+                <option value="neon">Neon</option>
+                <option value="supabase">Supabase</option>
+              </select>
+              <label htmlFor="username">Username</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                className={inputClass}
+                autoComplete="true"
+                required
+              />
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className={inputClass}
+                required
+              />
+              <label htmlFor="host">Host</label>
+              <input
+                type="text"
+                id="host"
+                name="host"
+                value={formData.host}
+                onChange={handleChange}
+                className={inputClass}
+                autoComplete="true"
+                required
+              />
+              <label htmlFor="port">Port</label>
+              <input
+                type="number"
+                id="port"
+                name="port"
+                value={formData.port}
+                onChange={handleChange}
+                className={inputClass}
+                autoComplete="true"
+              />
+              <label htmlFor="DBName">DB name</label>
+              <input
+                type="text"
+                id="DBName"
+                name="DBName"
+                value={formData.DBName}
+                onChange={handleChange}
+                className={inputClass}
+                autoComplete="true"
+                required
+              />
+            </div>
           </div>
+          <div className="flex flex-col items-center gap-[10px]">
+            <Button text="Connect" mode="light"></Button>
+          </div>
+        </form>
+      </div>
+      <div className="flex flex-col">
+        <h2 className="text-center text-[32px] py-[2rem]">&nbsp;</h2>
+        <div className="flex flex-1 items-center">
+          <span className="self-center text-[32px]">OR</span>
         </div>
-        <div className="flex flex-col items-center gap-[10px]">
-          <Button text="Connect" mode="light"></Button>
-        </div>
-      </form>
+      </div>
+      <div className="flex flex-col">
+        <h2 className="text-center text-[32px] py-[2rem]">Use our demo</h2>
+        <form
+          onSubmit={handleDemoConnectionRequest}
+          className="flex flex-1 items-center"
+        >
+          <button className="w-[250px] h-[100px] rounded-[0.5rem] text-[2rem] bg-[#4089FF] text-[white] hover:cursor-pointer">
+            I'm in
+          </button>
+        </form>
+      </div>
       {message && <p>{message}</p>}
-    </>
+    </div>
   );
 }
