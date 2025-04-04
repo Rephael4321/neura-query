@@ -31,7 +31,7 @@ export default function Navbar() {
   return (
     <>
       {jwtValid ? <SignedIn user={sub}></SignedIn> : <SignedOut></SignedOut>}
-      <div id="spacer" className="w-[100%] h-[70px]"></div>
+      <div id="spacer" className="w-[100%] h-[10vh]"></div>
     </>
   );
 }
