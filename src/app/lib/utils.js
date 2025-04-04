@@ -56,9 +56,9 @@ export async function GetAccessToken(endpoint, request) {
 }
 
 export function URIComposer(data) {
-  if (data.provider.toUpperCase() === "NEON") {
-    return `postgresql+asyncpg://${data.username}:${data.password}@${data.host}/${data.DBName}`;
-  } else if (data.provider.toUpperCase() === "SUPABASE") {
+  if (data.port) {
     return `postgresql+asyncpg://${data.username}:${data.password}@${data.host}:${data.port}/${data.DBName}`;
+  } else {
+    return `postgresql+asyncpg://${data.username}:${data.password}@${data.host}/${data.DBName}`;
   }
 }

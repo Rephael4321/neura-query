@@ -3,11 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/ui/button";
-import { connection } from "next/server";
 
 export default function ConnectDB() {
   const [formData, setFormData] = useState({
-    provider: "neon",
     username: "",
     password: "",
     host: "",
@@ -68,17 +66,6 @@ export default function ConnectDB() {
         >
           <div className="flex flex-column justify-center">
             <div className="grid grid-cols-[max-content_250px] gap-4 p-4 m-auto">
-              <label htmlFor="provider">Provider</label>
-              <select
-                id="provider"
-                name="provider"
-                className={inputClass}
-                value={formData.provider}
-                onChange={handleChange}
-              >
-                <option value="neon">Neon</option>
-                <option value="supabase">Supabase</option>
-              </select>
               <label htmlFor="username">Username</label>
               <input
                 type="text"

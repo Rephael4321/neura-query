@@ -16,7 +16,7 @@ export async function POST(request) {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({ uri: uri, provider: formData.provider }),
+        body: JSON.stringify({ uri: uri }),
       }
     );
 
