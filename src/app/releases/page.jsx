@@ -5,6 +5,10 @@ export default function Releases() {
     <div className="mx-[20%]">
       <h1 className="text-[2rem] my-[24px]">Releases</h1>
       <Release
+        title="1.1.5 - 04/04/2025"
+        description="AI prompts improved. Now the AI is more consistent with its responses."
+      ></Release>
+      <Release
         title="1.1.4 - 04/04/2025"
         description="Added logger. Now Neura Query will log queries and commands on the API, enabling convenient way to debug errors, like DB commands failing when they shouldn't."
       ></Release>
