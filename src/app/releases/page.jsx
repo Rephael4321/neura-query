@@ -5,6 +5,10 @@ export default function Releases() {
     <div className="mx-[20%]">
       <h1 className="text-[2rem] my-[24px]">Releases</h1>
       <Release
+        title="1.2.2 - 30/04/2025"
+        description="Logger fixed, now it supports Hebrew too."
+      ></Release>
+      <Release
         title="1.2.1 - 30/04/2025"
         description="Fixed AI prompts for better responses."
       ></Release>
