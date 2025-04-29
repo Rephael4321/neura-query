@@ -126,7 +126,8 @@ export default function ConnectDB() {
           </div>
         </form>
       </div>
-      <div className="flex flex-col">
+      {/* This section has been disabled due to Nadav Gothait request. */}
+      {/* <div className="flex flex-col">
         <h2 className="text-center text-[32px] py-[2rem]">&nbsp;</h2>
         <div className="flex flex-1 items-center">
           <span className="self-center text-[32px]">OR</span>
@@ -142,7 +143,7 @@ export default function ConnectDB() {
             I'm in
           </button>
         </form>
-      </div>
+      </div> */}
       {message && <p>{message}</p>}
     </div>
   );

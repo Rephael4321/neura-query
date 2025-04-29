@@ -5,7 +5,11 @@ export default function Releases() {
     <div className="mx-[20%]">
       <h1 className="text-[2rem] my-[24px]">Releases</h1>
       <Release
-        title="1.1.5 - 04/04/2025"
+        title="1.2.0 - 29/04/2025"
+        description="DB URI connection is now saved on NeuraQuery servers. On next login, NeuraQuery will remember the last DB URI the user was working with."
+      ></Release>
+      <Release
+        title="1.1.5 - 27/04/2025"
         description="AI prompts improved. Now the AI is more consistent with its responses."
       ></Release>
       <Release

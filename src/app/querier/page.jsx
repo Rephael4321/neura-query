@@ -28,22 +28,5 @@ export default function ProtectedQuerier() {
     checkJWT();
   }, [pathname]);
 
-  useEffect(() => {
-    async function fetchCookies() {
-      const response = await fetch("/api/get_connect_db_cookies");
-      return response;
-    }
-
-    if (jwtValid === false) {
-      router.push("/");
-    } else {
-      fetchCookies().then((isOK) => {
-        if (!isOK.ok) {
-          router.push("/connect_db");
-        }
-      });
-    }
-  }, [jwtValid, router]);
-
   return jwtValid ? <Querier /> : null;
 }

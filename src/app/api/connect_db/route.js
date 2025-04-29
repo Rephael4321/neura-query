@@ -8,25 +8,16 @@ export async function POST(request) {
   const uri = URIComposer(formData);
 
   try {
-    const response = await fetch(
-      `${process.env.SERVER_ADDRESS}/fetch_metadata`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ uri: uri }),
-      }
-    );
+    const response = await fetch(`${process.env.SERVER_ADDRESS}/connect_db`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ uri: uri }),
+    });
 
     if (response.ok) {
-      (await cookie).set("uri", uri, {
-        httpOnly: true,
-        sameSite: "strict",
-        path: "/",
-      });
-
       return new Response(JSON.stringify({}), { status: 200 });
     } else if (response.status === 401) {
       const data = await response.json();

@@ -28,7 +28,12 @@ export default function SignIn() {
       });
 
       if (response.ok) {
-        router.push("/connect_db");
+        const data = await response.json();
+        if (data.has_db_uri) {
+          router.push("/querier");
+        } else {
+          router.push("/connect_db");
+        }
       } else {
         const errorData = await response.json();
         setMessage(errorData.message || "Error submitting form.");

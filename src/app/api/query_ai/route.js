@@ -4,8 +4,7 @@ export async function POST(request) {
   const cookie = cookies();
   const accessToken = (await cookie).get("access_token")?.value;
   let formData = await request.json();
-  const uri = (await cookie).get("uri")?.value;
-  formData = { uri: uri, ...formData };
+  formData = { ...formData };
 
   try {
     const response = await fetch(`${process.env.SERVER_ADDRESS}/query_ai`, {

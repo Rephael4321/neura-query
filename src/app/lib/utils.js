@@ -42,6 +42,7 @@ export async function GetAccessToken(endpoint, request) {
         JSON.stringify({
           access_token: data.access_token,
           token_type: data.token_type,
+          has_db_uri: data.has_db_uri
         }),
         {
           status: 200,
