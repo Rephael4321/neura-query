@@ -2,12 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
 import Querier from "@/ui/protected/querier";
 
 export default function ProtectedQuerier() {
   const pathname = usePathname();
-  const router = useRouter();
   const [jwtValid, setJwtValid] = useState(null);
 
   useEffect(() => {

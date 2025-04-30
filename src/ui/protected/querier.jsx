@@ -58,18 +58,35 @@ export default function Querier() {
             rows: [],
           });
         } else if (data.result.type === "list") {
-          const titles = Object.entries(data.result.message[0]).map(
-            ([key, value]) => `${key}`
-          );
-          const rows = data.result.message.map((item) =>
-            Object.entries(item).map(([key, value]) => `${value}`)
-          );
-          setQueryResult({
-            type: data.result.type,
-            message: "",
-            titles: titles,
-            rows: rows,
-          });
+          console.log("###########################################");
+          console.log(data.result.message[0]);
+          console.log("###########################################");
+          console.log(data.result.message);
+          console.log("###########################################");
+          console.log(data.result);
+          console.log("###########################################");
+          console.log(data);
+          if (data.result.message.length !== 0) {
+            const titles = Object.entries(data.result.message[0]).map(
+              ([key, value]) => `${key}`
+            );
+            const rows = data.result.message.map((item) =>
+              Object.entries(item).map(([key, value]) => `${value}`)
+            );
+            setQueryResult({
+              type: data.result.type,
+              message: "",
+              titles: titles,
+              rows: rows,
+            });
+          } else {
+            setQueryResult({
+              type: "str",
+              message: "No results for specified query.",
+              titles: [],
+              rows: [],
+            });
+          }
         }
         setQueryFormData({ query: command });
       } else {
@@ -77,6 +94,7 @@ export default function Querier() {
         setErrorMessage(errorData.message || "Error submitting form.");
       }
     } catch (error) {
+      console.log("#######################33");
       console.log(error);
       setErrorMessage("Network error. Try again later.");
     }
