@@ -36,6 +36,7 @@ export default function SignUp() {
         router.push("/connect_db");
       } else {
         const errorData = await response.json();
+        console.log(errorData);
         setMessage(errorData.message || "Error submitting form.");
       }
     } catch (error) {
@@ -45,8 +46,8 @@ export default function SignUp() {
 
   return (
     <>
-      <h1 className="text-center text-[32px] mt-[50px]">Sign Up</h1>
-      <div className="h-[55vh] flex flex-col items-center justify-center gap-[30px]">
+      <div className="h-[80vh] pb-[60px] flex flex-col items-center justify-center gap-[30px]">
+        <h1 className="text-center text-[32px] mb-[60px]">Sign Up</h1>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-column justify-center">
             <div className="grid grid-cols-[max-content_250px] gap-4 p-4 m-auto">

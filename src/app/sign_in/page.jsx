@@ -29,7 +29,9 @@ export default function SignIn() {
 
       if (response.ok) {
         const data = await response.json();
-        if (data.has_db_uri) {
+        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@2");
+        console.log(data);
+        if (data.has_uri) {
           router.push("/querier");
         } else {
           router.push("/connect_db");
@@ -45,8 +47,8 @@ export default function SignIn() {
 
   return (
     <>
-      <h1 className="text-center text-[32px] mt-[50px]">Sign In</h1>
-      <div className="h-[55vh] flex flex-col items-center justify-center gap-[30px]">
+      <div className="h-[80vh] pb-[60px] flex flex-col items-center justify-center gap-[30px]">
+        <h1 className="text-center text-[32px] mb-[60px]">Sign In</h1>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-column justify-center">
             <div className="grid grid-cols-[max-content_250px] gap-4 p-4 m-auto">

@@ -5,6 +5,10 @@ export default function Releases() {
     <div className="mx-[20%]">
       <h1 className="text-[2rem] my-[24px]">Releases</h1>
       <Release
+        title="1.2.3 - 20/05/2025"
+        description="Version 1.2.x was all about Kafka implementation, and It's here now! Neura Query is now using Kafka to support robust architecture, allowing scaling across different servers very easily. FastAPI and ServerManger are now separate services. Accepting requests and handling them are now different processes. Every user request to Neura Query is now delivered to FastAPI, registered on a PostgreSQL DB, and being handled by the ServerManager. Kafka is responsible to push messages to the ServerManager."
+      ></Release>
+      <Release
         title="1.2.2 - 30/04/2025"
         description="Logger fixed, now it supports Hebrew too."
       ></Release>

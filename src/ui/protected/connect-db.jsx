@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { sleep } from "@/app/lib/client_utils";
 import Button from "@/ui/button";
 
 export default function ConnectDB() {
@@ -30,7 +31,30 @@ export default function ConnectDB() {
       });
 
       if (response.ok) {
-        router.push("/querier");
+        const responseData = await response.json();
+        const recordId = responseData.record_id;
+        const topicName = responseData.topic_name;
+        const requestStatusFormData = {
+          recordId: recordId,
+          topicName: topicName,
+        };
+        for (let i = 0; i < 20; i++) {
+          let requestStatus = await fetch("/api/get_connect_db_status", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(requestStatusFormData),
+          });
+          let requestStatusResponse = await requestStatus.json();
+          if (requestStatusResponse.status === "success") {
+            router.push("/querier");
+            return;
+          } else if (requestStatusResponse.status === "failed") {
+            setMessage(requestStatusResponse.failure_reason);
+            break;
+          }
+          await sleep(1000);
+        }
+        setMessage("Network error. Try again later.");
       } else {
         const errorData = await response.json();
         setMessage(errorData.message || "Error submitting form.");
@@ -46,16 +70,16 @@ export default function ConnectDB() {
     handleSubmit(e, formData);
   };
 
-  const handleDemoConnectionRequest = async (e) => {
-    e.preventDefault();
-    setMessage("");
-    const response = await fetch("/api/get_demo_connection_details");
-    const demoConnectionDetails = await response.json();
-    handleSubmit(e, demoConnectionDetails);
-  };
+  // const handleDemoConnectionRequest = async (e) => {
+  //   e.preventDefault();
+  //   setMessage("");
+  //   const response = await fetch("/api/get_demo_connection_details");
+  //   const demoConnectionDetails = await response.json();
+  //   handleSubmit(e, demoConnectionDetails);
+  // };
 
   return (
-    <div className="flex justify-around mx-[15%]">
+    <div className="flex justify-around mx-[15%] h-[80vh]">
       <div className="flex flex-col">
         <h2 className="text-center text-[32px] py-[2rem]">
           Connect your own DB

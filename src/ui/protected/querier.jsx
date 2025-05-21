@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { sleep } from "@/app/lib/client_utils";
 import Button from "@/ui/button";
 import TableResult from "@/ui/table-result";
 
@@ -39,7 +40,6 @@ export default function Querier() {
   const handleAPIRequest = async (e, endpoint, formData) => {
     e.preventDefault();
     setErrorMessage("");
-
     try {
       const response = await fetch(endpoint, {
         method: "POST",
@@ -48,53 +48,85 @@ export default function Querier() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        const command = data.command;
-        if (data.result.type === "str") {
-          setQueryResult({
-            type: data.result.type,
-            message: data.result.message,
-            titles: [],
-            rows: [],
+        const responseData = await response.json();
+        const recordId = responseData.record_id;
+        const topicName = responseData.topic_name;
+        const requestStatusFormData = {
+          recordId: recordId,
+          topicName: topicName,
+        };
+        for (let i = 0; i < 20; i++) {
+          console.log(i);
+          let requestStatus = await fetch("/api/get_connect_db_status", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(requestStatusFormData),
           });
-        } else if (data.result.type === "list") {
-          console.log("###########################################");
-          console.log(data.result.message[0]);
-          console.log("###########################################");
-          console.log(data.result.message);
-          console.log("###########################################");
-          console.log(data.result);
-          console.log("###########################################");
-          console.log(data);
-          if (data.result.message.length !== 0) {
-            const titles = Object.entries(data.result.message[0]).map(
-              ([key, value]) => `${key}`
-            );
-            const rows = data.result.message.map((item) =>
-              Object.entries(item).map(([key, value]) => `${value}`)
-            );
-            setQueryResult({
-              type: data.result.type,
-              message: "",
-              titles: titles,
-              rows: rows,
-            });
-          } else {
+          let requestStatusResponse = await requestStatus.json();
+          if (requestStatusResponse.status === "success") {
+            if (requestStatusResponse.responder == "DB") {
+              if (requestStatusResponse.result_type == "str") {
+                setQueryResult({
+                  type: data.result.type,
+                  message: requestStatusResponse.result,
+                  titles: [],
+                  rows: [],
+                });
+              } else if (requestStatusResponse.result_type == "list") {
+                console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+                console.log(requestStatusResponse);
+                const result = requestStatusResponse.result
+                  .split("\x1f")
+                  .map((jsonStr) => JSON.parse(jsonStr));
+                console.log(result);
+                if (result.length !== 0) {
+                  const titles = Object.entries(result[0]).map(
+                    ([key, value]) => `${key}`
+                  );
+                  const rows = result.map((item) =>
+                    Object.entries(item).map(([key, value]) => `${value}`)
+                  );
+                  setQueryResult({
+                    type: requestStatusResponse.result_type,
+                    message: "",
+                    titles: titles,
+                    rows: rows,
+                  });
+                } else {
+                  setQueryResult({
+                    type: "str",
+                    message: "No results for specified query.",
+                    titles: [],
+                    rows: [],
+                  });
+                }
+              }
+              setQueryFormData({ query: requestStatusResponse.db_query });
+            } else if (requestStatusResponse.responder == "AI") {
+              setQueryResult({
+                type: "str",
+                message: requestStatusResponse.response,
+                titles: [],
+                rows: [],
+              });
+            }
+            return;
+          } else if (requestStatusResponse.status === "failed") {
             setQueryResult({
               type: "str",
-              message: "No results for specified query.",
+              message: requestStatusResponse.failure_reason,
               titles: [],
               rows: [],
             });
+            return;
           }
+          await sleep(1000);
         }
-        setQueryFormData({ query: command });
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.message || "Error submitting form.");
       }
     } catch (error) {
-      console.log("#######################33");
       console.log(error);
       setErrorMessage("Network error. Try again later.");
     }
@@ -130,7 +162,7 @@ export default function Querier() {
           name="query_result"
           id="query_result"
           onChange={handleResultChange}
-          className="w-[50%] h-[55vh] overflow-auto pt-[25px]"
+          className="w-[50%] h-[48vh] overflow-auto pt-[25px]"
         >
           {queryResult.type === "str" ? (
             queryResult.message
@@ -143,7 +175,7 @@ export default function Querier() {
         </div>
       </div>
       <form
-        className="flex flex-col flex-1 bg-[#4089ff] w-[50%] h-[30vh] p-[0.75rem] rounded-[25px] m-[auto] justify-between"
+        className="flex flex-col flex-1 bg-[#4089ff] w-[50%] h-[30vh] p-[0.75rem] rounded-[25px] m-[auto] mb-[2vh] justify-between"
         onSubmit={queryWindow === "AI" ? handleTextSubmit : handleQuerySubmit}
       >
         <textarea
